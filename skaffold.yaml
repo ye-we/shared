@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    #  don't push it to docker hub on change
+    push: false
+  artifacts:
+    - image: yewe17/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # set of files that skaffold needs to watch
+          - src: "src/**/*.ts"
+            # where to sync inside of our running container
+            dest: .
